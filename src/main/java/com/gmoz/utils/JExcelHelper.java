@@ -43,8 +43,8 @@ public class JExcelHelper {
 	/**
 	 * Mô tả: Cập nhật Cell từ excel có sẵn
 	 * 
-	 * @param path 		Đường dẫn file
-	 * @param limit		Số hàng mỗi bảng
+	 * @param path  Đường dẫn file
+	 * @param limit Số hàng mỗi bảng
 	 * @throws IOException
 	 */
 	public void updateExcel(String path, int limit, List<StudentEntity> list) throws IOException {
@@ -69,7 +69,6 @@ public class JExcelHelper {
 //		writeHeaderLine();
 		writeDataLine(list, limit);
 
-		System.out.println(sheet.getRow(0).getPhysicalNumberOfCells());
 		// Auto size column
 		for (int i = 0; i < sheet.getRow(0).getPhysicalNumberOfCells(); i++) {
 			sheet.autoSizeColumn(i);
@@ -87,6 +86,11 @@ public class JExcelHelper {
 		out.close();
 	}
 
+	/**
+	 * Mô tả: Thu thập danh sách các hàng
+	 * 
+	 * @return trả về giá trị các hàng
+	 */
 	private List<Row> getHeaderRows() {
 		List<Row> rows = new ArrayList<>();
 		Sheet sheet = workbook.getSheetAt(0);
@@ -97,6 +101,12 @@ public class JExcelHelper {
 		return rows;
 	}
 
+	/**
+	 * Mô tả: Thu thập danh sách kiểu dáng của một hàng
+	 * 
+	 * @param row	dòng/hàng cần thu thập
+	 * @return		trả về danh sách kiểu dáng các ô trong một hàng
+	 */
 	private List<CellStyle> getCellStyles(Row row) {
 		List<CellStyle> cellStyles = new ArrayList<>();
 		for (Cell cell : row) {
@@ -106,7 +116,7 @@ public class JExcelHelper {
 	}
 
 	/**
-	 * Create a cell
+	 * Mô tả: Create a cell
 	 * 
 	 * @param row         Hàng hiện tại
 	 * @param columnIndex Chỉ số cột
@@ -126,6 +136,10 @@ public class JExcelHelper {
 		cell.setCellStyle(style);
 	}
 
+	
+	/**
+	 * Mô tả: Nhập toàn bộ đầu template của excel
+	 */
 	private void writeHeaderLine() {
 		for (int i = 0; i < headers.size(); i++) {
 			copyRow(workbook, sheet, i, rowIndex++);
@@ -135,6 +149,7 @@ public class JExcelHelper {
 	private static final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
 	/**
+	 * Mô tả: Nhập dữ liệu từ danh sách với số lượng tự động ngắt trang
 	 * 
 	 * @param tableName Tên tiêu đề của bảng
 	 * @param list      Danh sách dữ liệu bảng
@@ -169,14 +184,21 @@ public class JExcelHelper {
 			createCell(row, columnIndex++, list.get(i).getAge(), cellStyles.get(cellStyleIndex));
 
 			if ((i + 1) % limit == 0) {
-				sheet.setRowBreak(rowIndex++);
+				sheet.setRowBreak(rowIndex);
 				writeHeaderLine();
-			} else {
-				rowIndex++;
 			}
+			rowIndex++;
 		}
 	}
 
+	/**
+	 * Mô tả: Sao chép hàng tới hàng
+	 * 
+	 * @param workbook		File excel
+	 * @param worksheet		Sheet excel
+	 * @param from			số dòng/hàng cần sao chép
+	 * @param to			số dòng/hàng sao chép tới
+	 */
 	public void copyRow(Workbook workbook, Sheet worksheet, int from, int to) {
 		Row sourceRow = worksheet.getRow(from);
 		Row newRow = worksheet.getRow(to);
@@ -205,30 +227,67 @@ public class JExcelHelper {
 		copyAnyMergedRegions(worksheet, sourceRow, newRow);
 	}
 
+	/**
+	 * Mô tả: Sao chép kiểu, định dạng một ô tới ô khác
+	 * 
+	 * @param workbook	File excel
+	 * @param oldCell	ô excel cũ
+	 * @param newCell	ô excel mới
+	 */
 	private void copyCellStyle(Workbook workbook, Cell oldCell, Cell newCell) {
 		newCell.setCellStyle(oldCell.getCellStyle());
 	}
 
+	/**
+	 * Mô tả: Sao chép comment tại ô excel tới ô khác
+	 * 
+	 * @param oldCell	ô cũ
+	 * @param newCell	ô mới
+	 */
 	private void copyCellComment(Cell oldCell, Cell newCell) {
 		if (newCell.getCellComment() != null)
 			newCell.setCellComment(oldCell.getCellComment());
 	}
-
+	
+	/**
+	 * Mô tả: Sao chép đường dẫn siêu liên kết của một ô excel tới ô khác
+	 * 
+	 * @param oldCell	ô cũ
+	 * @param newCell	ô mới
+	 */
 	private void copyCellHyperlink(Cell oldCell, Cell newCell) {
 		if (oldCell.getHyperlink() != null)
 			newCell.setHyperlink(oldCell.getHyperlink());
 	}
 
+	/**
+	 * Mô tả: Sao chép giá trị và kiểu định dạng dữ liệu của một ô excel tới ô khác
+	 * 
+	 * @param oldCell	ô cũ
+	 * @param newCell	ô mới
+	 */
 	private void copyCellDataTypeAndValue(Cell oldCell, Cell newCell) {
 		setCellDataType(oldCell, newCell);
 		setCellDataValue(oldCell, newCell);
 	}
 
+	/**
+	 * Mô tả: Sao chép định dạng kiểu dữ liệu của một ô excel tới ô khác
+	 * 
+	 * @param oldCell
+	 * @param newCell
+	 */
 	@SuppressWarnings("deprecation")
 	private static void setCellDataType(Cell oldCell, Cell newCell) {
 		newCell.setCellType(oldCell.getCellType());
 	}
 
+	/**
+	 * Mô tả: Sao chép giá trị của một ô excel tới ô khác
+	 * 
+	 * @param oldCell
+	 * @param newCell
+	 */
 	private void setCellDataValue(Cell oldCell, Cell newCell) {
 		switch (oldCell.getCellType()) {
 		case BLANK:
@@ -256,15 +315,36 @@ public class JExcelHelper {
 		}
 	}
 
+	/**
+	 * Mô tả: Kiểm trả dòng/hàng đã tồn tại hay chưa?
+	 * 
+	 * @param	newRow chỉ số dòng/hàng cần kiểm tra
+	 * @return	trả về true nếu đã tồn tại và ngược lại
+	 */
 	private boolean alreadyExists(Row newRow) {
 		return newRow != null;
 	}
 
+	/**
+	 * Mô tả: Sao chép toàn bộ hàng/dòng có merge
+	 * 
+	 * @param worksheet		File excel
+	 * @param sourceRow		nguồn của hàng/dòng
+	 * @param newRow		nguồn của hàng/dòng
+	 */
 	private void copyAnyMergedRegions(Sheet worksheet, Row sourceRow, Row newRow) {
 		for (int i = 0; i < worksheet.getNumMergedRegions(); i++)
 			copyMergeRegion(worksheet, sourceRow, newRow, worksheet.getMergedRegion(i));
 	}
 
+	/**
+	 * Mô tả: Sao chép toàn bộ hàng/dòng theo khoảng có merge
+	 * 
+	 * @param worksheet		File excel
+	 * @param sourceRow		nguồn của hàng/dòng
+	 * @param newRow		đích của hàng/dòng
+	 * @param mergedRegion	số khoảng
+	 */
 	private void copyMergeRegion(Sheet worksheet, Row sourceRow, Row newRow, CellRangeAddress mergedRegion) {
 		CellRangeAddress range = mergedRegion;
 		if (range.getFirstRow() == sourceRow.getRowNum()) {
