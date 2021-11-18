@@ -1,0 +1,40 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+   <head>
+      <meta charset="UTF-8" />
+      <title>Student List</title>
+      <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+   </head>
+   <body>
+      <h1>Student List</h1>
+      <br/><br/>
+      <div>
+      	<a th:href="@{'/export'}">
+      		<button>Export</button>
+      	</a>
+      	<a th:href="@{'/go'}">
+      		<button>Update from exist excel</button>
+      	</a>
+         <table border="1">
+            <tr>
+               <th>STT</th>
+               <th>Mã sinh viên</th>
+               <th>Họ và tên</th>
+               <th>Giới tính</th>
+               <th>Ngày sinh</th>
+               <th>Số điện thoại</th>
+               <th>Tuổi</th>
+            </tr>
+            <tr th:each ="student, state : ${students}">
+               <td th:utext="${state.index + 1}"></td>
+               <td th:utext="${student.id}"></td>
+               <td th:utext="${student.name}"></td>
+               <td th:utext="${student.gender?'Nam':'Nu'}"></td>
+               <td th:utext="${#dates.format(student.birthdate, 'dd/MM/yyyy')}"></td>
+               <td th:utext="${student.phone}"></td>
+               <td th:utext="${student.age}"></td>
+            </tr>
+         </table>
+      </div>
+   </body>
+</html>
