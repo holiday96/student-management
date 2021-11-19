@@ -180,20 +180,37 @@ public class JExcelHelper {
 
 			// Đếm số hàng sẽ tạo trong list
 			countBreak += countStudent;
+			System.out.println("BREAK: " + countBreak);
 			if (countBreak >= limit) {
 				countBreak -= limit;
-				System.out.println("\nTach bang...");
-				System.out.println("from = " + rowIndex);
-				System.out.println("limit = " + limit);
-				System.out.println("count = " + count);
-				System.out.println("to = " + (rowIndex + limit - count % limit));
+				if (count % limit != 0) {
+					System.out.println("-BREAK: " + countBreak + " left");
+					System.out.println("\nTach bang...");
+					System.out.println("count = " + count);
+					System.out.println("from = " + rowIndex);
+					System.out.println("to = " + (rowIndex + limit - count % limit));
+					System.out.println("count%limit = " + count % limit);
 
-				restCount = countStudent - limit + count % limit - 1;
+					restCount = countStudent - limit + count % limit - 1;
 
-				sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex + limit - count % limit, 1, 1));
-				createCell(getCurrentRow(rowIndex), 1, clas.getName(), cellStyle);
+					sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex + limit - count % limit, 1, 1));
+					createCell(getCurrentRow(rowIndex), 1, clas.getName(), cellStyle);
+				} else {
+					System.out.println("-BREAK: " + countBreak + " left");
+					System.out.println("\nTach bang...");
+					System.out.println("count = " + count);
+					System.out.println("from = " + rowIndex);
+					System.out.println("to = " + rowIndex);
+					System.out.println("count%limit = " + count % limit);
+
+					restCount = countStudent - 1;
+
+//					sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex, 1, 1));
+					createCell(getCurrentRow(rowIndex), 1, clas.getName(), cellStyle);
+				}
 			} else {
 				System.out.println("\nNguyen bang...");
+				System.out.println("count = " + count);
 				System.out.println("from = " + rowIndex);
 				System.out.println("to = " + (rowIndex + countStudent - 1));
 				sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex + countStudent - 1, 1, 1));
@@ -226,7 +243,9 @@ public class JExcelHelper {
 
 					System.out.println("from = " + rowIndex);
 					System.out.println("to = " + (rowIndex + restCount - 1));
-					sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex + restCount - 1, 1, 1));
+					if (rowIndex != (rowIndex + restCount - 1)) {
+						sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex + restCount - 1, 1, 1));
+					}
 
 					createCell(sheet.createRow(rowIndex), 1, clas.getName(), cellStyle);
 				} else {
