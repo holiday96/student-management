@@ -29,6 +29,13 @@ import org.springframework.stereotype.Component;
 
 import com.gmoz.entity.StudentEntity;
 
+/**
+ * Mô tả: Class hỗ trợ xuất file Excel từ danh sách data
+ * 
+ * @author holiday96
+ * @version 1.0
+ * @since 17/11/2021
+ */
 @Component
 public class FileExporter {
 

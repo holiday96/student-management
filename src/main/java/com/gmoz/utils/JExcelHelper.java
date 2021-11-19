@@ -23,7 +23,7 @@ import org.springframework.stereotype.Component;
 import com.gmoz.entity.StudentEntity;
 
 /**
- * Mô tả:
+ * Mô tả: Class hỗ trợ thêm dữ liệu vào file Excel có sẵn
  * 
  * @author DucBV
  * @version 1.0
@@ -44,7 +44,7 @@ public class JExcelHelper {
 	 * Mô tả: Cập nhật Cell từ excel có sẵn
 	 * 
 	 * @param path  Đường dẫn file
-	 * @param limit Số hàng mỗi bảng
+	 * @param limit Giới hạn số lượng hàng trên một bảng
 	 * @throws IOException
 	 */
 	public void updateExcel(String path, int limit, List<StudentEntity> list) throws IOException {
@@ -153,7 +153,7 @@ public class JExcelHelper {
 	 * 
 	 * @param tableName Tên tiêu đề của bảng
 	 * @param list      Danh sách dữ liệu bảng
-	 * @param limit     Số hàng mỗi bảng
+	 * @param limit     Giới hạn số lượng dòng trên một bảng
 	 */
 	private void writeDataLine(List<StudentEntity> list, int limit) {
 		// Nạp dữ liệu từ dòng cuối có sẵn
@@ -196,8 +196,8 @@ public class JExcelHelper {
 	 * 
 	 * @param workbook		File excel
 	 * @param worksheet		Sheet excel
-	 * @param from			số dòng/hàng cần sao chép
-	 * @param to			số dòng/hàng sao chép tới
+	 * @param from			chỉ số dòng/hàng cần sao chép
+	 * @param to			chỉ số dòng/hàng sao chép tới
 	 */
 	public void copyRow(Workbook workbook, Sheet worksheet, int from, int to) {
 		Row sourceRow = worksheet.getRow(from);
