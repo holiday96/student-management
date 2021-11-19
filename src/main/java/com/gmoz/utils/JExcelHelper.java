@@ -184,10 +184,11 @@ public class JExcelHelper {
 			createCell(row, columnIndex++, list.get(i).getAge(), cellStyles.get(cellStyleIndex));
 
 			if ((i + 1) % limit == 0) {
-				sheet.setRowBreak(rowIndex);
+				sheet.setRowBreak(rowIndex++);
 				writeHeaderLine();
+			} else {
+				rowIndex++;
 			}
-			rowIndex++;
 		}
 	}
 
