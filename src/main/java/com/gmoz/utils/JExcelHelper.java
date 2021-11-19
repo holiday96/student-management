@@ -142,6 +142,7 @@ public class JExcelHelper {
 	 * Mô tả: Nhập toàn bộ đầu template của excel
 	 */
 	private void writeHeaderLine() {
+		System.out.println("VE TIEU DE");
 		for (int i = 0; i < headers.size(); i++) {
 			copyRow(workbook, sheet, i, rowIndex++);
 		}
@@ -166,8 +167,6 @@ public class JExcelHelper {
 		// Số thứ tự
 		int count = 1;
 		int countBreak = 0;
-		//
-		int numHeader = 0;
 		for (ClassEntity clas : list) {
 
 			// Get cell style of class name property
@@ -188,14 +187,11 @@ public class JExcelHelper {
 				System.out.println("limit = " + limit);
 				System.out.println("count = " + count);
 				System.out.println("to = " + (rowIndex + limit - count % limit));
-				System.out.println("++numHeader = " + numHeader);
-				
+
 				restCount = countStudent - limit + count % limit - 1;
-				
+
 				sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex + limit - count % limit, 1, 1));
 				createCell(getCurrentRow(rowIndex), 1, clas.getName(), cellStyle);
-
-				numHeader += headers.size();
 			} else {
 				System.out.println("\nNguyen bang...");
 				System.out.println("from = " + rowIndex);
@@ -223,8 +219,8 @@ public class JExcelHelper {
 						cellStyles.get(cellStyleIndex++));
 				createCell(getCurrentRow(rowIndex), columnIndex++, student.getAge(), cellStyles.get(cellStyleIndex));
 
-				if (count % limit == 0) {
-					System.out.println("new table...");
+				if (count % limit == 0 && restCount != 0) {
+					System.out.println("New table-------");
 					sheet.setRowBreak(rowIndex++);
 					writeHeaderLine();
 
