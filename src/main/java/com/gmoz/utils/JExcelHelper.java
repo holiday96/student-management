@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
@@ -70,8 +71,8 @@ public class JExcelHelper {
 		writeDataLine(list, limit);
 
 		// Auto size column
-		for (int i = 0; i < sheet.getRow(0).getPhysicalNumberOfCells(); i++) {
-			sheet.autoSizeColumn(i);
+		for (int i = 0; i < sheet.getRow(sheet.getLastRowNum()).getPhysicalNumberOfCells(); i++) {
+//			sheet.autoSizeColumn(i);
 //			sheet.setColumnWidth(i, 9000);
 //			sheet.autoSizeColumn(i);
 //			System.out.println(sheet.getColumnWidth(i));
@@ -170,6 +171,11 @@ public class JExcelHelper {
 			// Get cell style of class name property
 			CellStyle cellStyle = cellStyles.get(1);
 			cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+			cellStyle.setBorderBottom(BorderStyle.THIN);
+			cellStyle.setBorderTop(BorderStyle.THIN);
+			cellStyle.setBorderLeft(BorderStyle.THIN);
+			cellStyle.setBorderRight(BorderStyle.THIN);
+			
 
 			// Merge Cell class name
 			int countStudent = clas.getStudents().size();
