@@ -67,8 +67,6 @@ public class JExcelHelper {
 		// Get Rows of header
 		headers = getHeaderRows();
 
-//		copyRow(workbook, sheet, 2, rowIndex++);
-//		writeHeaderLine();
 		writeDataLine(list, limit);
 
 		// Auto size column
@@ -190,9 +188,7 @@ public class JExcelHelper {
 					System.out.println("from = " + rowIndex);
 					System.out.println("to = " + (rowIndex + limit - count % limit));
 					System.out.println("count%limit = " + count % limit);
-
 					restCount = countStudent - limit + count % limit - 1;
-
 					sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex + limit - count % limit, 1, 1));
 					createCell(getCurrentRow(rowIndex), 1, clas.getName(), cellStyle);
 				} else {
@@ -202,10 +198,7 @@ public class JExcelHelper {
 					System.out.println("from = " + rowIndex);
 					System.out.println("to = " + rowIndex);
 					System.out.println("count%limit = " + count % limit);
-
 					restCount = countStudent - 1;
-
-//					sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex, 1, 1));
 					createCell(getCurrentRow(rowIndex), 1, clas.getName(), cellStyle);
 				}
 			} else {
@@ -238,16 +231,33 @@ public class JExcelHelper {
 
 				if (count % limit == 0 && restCount != 0) {
 					System.out.println("New table-------");
+					System.out.println("REst count: " + restCount);
 					sheet.setRowBreak(rowIndex++);
 					writeHeaderLine();
 
-					System.out.println("from = " + rowIndex);
-					System.out.println("to = " + (rowIndex + restCount - 1));
-					if (rowIndex != (rowIndex + restCount - 1)) {
+					if (restCount / limit != 0) {
+						System.out.println("restCount/limit != 0");
+						System.out.println("from = " + rowIndex);
+						System.out.println("to = " + (rowIndex + limit - 1));
+						if (rowIndex != (rowIndex + limit - 1)) {
+							sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex + limit - 1, 1, 1));
+						}
+					} else if (rowIndex != (rowIndex + restCount - 1)) {
+						System.out.println("rowIndex != (rowIndex + restCount - 1)");
+						System.out.println("from = " + rowIndex);
+						System.out.println("to = " + (rowIndex + restCount - 1));
 						sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex + restCount - 1, 1, 1));
 					}
-
+					restCount -= limit;
 					createCell(sheet.createRow(rowIndex), 1, clas.getName(), cellStyle);
+				} else if (count % limit == 0 && restCount == 0
+						&& (list.indexOf(clas) != list.indexOf(list.get(list.size() - 1)))) {
+					System.out.println(
+							"****Chi so cuoi " + (list.indexOf(clas) == list.indexOf(list.get(list.size() - 1))));
+					System.out.println("New table-------");
+					System.out.println("REst count: " + restCount);
+					sheet.setRowBreak(rowIndex++);
+					writeHeaderLine();
 				} else {
 					rowIndex++;
 				}
